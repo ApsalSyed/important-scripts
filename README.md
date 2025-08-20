@@ -1,82 +1,129 @@
-# Important Scripts
+Perfect 👍 Let’s create a **README.md** that explains what the script does, how to install, and how to use it.
+You can keep this alongside your `cleanup.sh` so others on your team (or future you) know exactly what it does.
 
-A collection of useful scripts for mobile development workflow optimization.
+---
 
-## Mobile Development Cleanup Script
+# 📦 Mobile Development Cleanup Script
 
-### Overview
+This repository contains a **shell script** (`cleanup.sh`) to free up disk space by clearing caches and build artifacts created by **Xcode** (iOS) and **Android Studio / Gradle** during mobile app development.
 
-The `cleanup.sh` script is a comprehensive tool designed to free up disk space by clearing various caches and temporary files generated during mobile development with Xcode and Android Studio.
+Over time, these caches can consume **tens of gigabytes** of space. This script makes it easy to clear them with confirmation prompts.
 
-### Features
+---
 
-- **Xcode Cleanup**: Removes DerivedData, Simulator data, Archives, and DeviceSupport files
-- **Android Cleanup**: Clears Gradle caches, build-cache, and Emulator AVDs
-- **Interactive**: Prompts for confirmation before each cleanup operation
-- **Disk Usage Monitoring**: Shows before and after disk space usage
+## ✨ Features
 
-### Usage
+- Clear **Xcode caches**:
 
-1. Make the script executable:
+  - DerivedData
+  - iOS Simulator data
+  - Archives
+  - Device Support files
+  - Crash logs & module cache (optional)
+
+- Clear **Android caches**:
+
+  - Gradle cache
+  - Android build-cache
+  - Emulator AVDs & system images
+  - Android Studio logs (optional)
+
+- Shows **disk usage before & after cleanup**
+
+- Interactive mode (asks before deleting each category)
+
+- Optional **extended cleanup** (system logs, user caches, etc.)
+
+---
+
+## 📂 File Structure
+
+```
+.
+├── cleanup.sh   # The cleanup script
+└── README.md    # Documentation
+```
+
+---
+
+## ⚙️ Setup
+
+1. Clone or copy this repository.
+2. Make the script executable:
 
    ```bash
    chmod +x cleanup.sh
    ```
 
-2. Run the script:
+---
 
-   ```bash
-   ./cleanup.sh
-   ```
+## 🚀 Usage
 
-3. Follow the interactive prompts to select which caches to clear:
-   - Xcode DerivedData
-   - iOS Simulator data
-   - Xcode Archives
-   - Xcode DeviceSupport files
-   - Gradle caches
-   - Android build-cache
-   - Android Emulator AVDs
+Run the script from terminal:
 
-### What Gets Cleaned
+```bash
+./cleanup.sh
+```
 
-#### Xcode Related
+- The script will show **disk space before cleanup**.
+- For each type of cache, it will ask:
 
-- `~/Library/Developer/Xcode/DerivedData/*` - Build artifacts and intermediate files
-- `~/Library/Developer/CoreSimulator/*` - iOS Simulator data and apps
-- `~/Library/Developer/Xcode/Archives/*` - App archives for distribution
-- `~/Library/Developer/Xcode/iOS DeviceSupport/*` - Device support files
+  ```
+  Do you want to clear Xcode DerivedData? (y/n):
+  ```
 
-#### Android Related
-
-- `~/.gradle/caches/` - Gradle build cache
-- `~/.android/build-cache/` - Android build cache
-- `~/.android/avd/*` - Android Virtual Device data
-
-### Safety
-
-- The script prompts for confirmation before each cleanup operation
-- Only removes cache and temporary files, not source code
-- Shows disk usage before and after cleanup
-
-### Requirements
-
-- macOS (for Xcode cleanup features)
-- Bash shell
-- Appropriate permissions to access the directories
-
-### Tips
-
-- Run this script periodically to maintain optimal disk space
-- Consider running before large builds to ensure clean state
-- Backup important data before running if you have custom configurations
+- Type `y` to confirm, or `n` to skip.
+- At the end, you’ll see **disk space after cleanup**.
 
 ---
 
-## Contributing
+## 🛠️ Optional Extended Cleanup
 
-Feel free to add more scripts to this collection for common development tasks.
+If you want to also clear:
 
-## License
+- macOS user caches (`~/Library/Caches`)
+- Temporary system files (`/private/var/folders/`)
+- Trash (`~/.Trash`)
 
-This project is open source and available under the MIT License.
+👉 You can add these to the script under an **extended mode**.
+_(By default, they’re not included to keep things safe.)_
+
+---
+
+## ⚠️ Notes
+
+- These commands **permanently delete files**.
+- The **first build** after cleanup will take longer because caches are rebuilt.
+- Run this occasionally (e.g., once a month) to keep disk usage under control.
+
+---
+
+## 🧑‍💻 Example
+
+```bash
+$ ./cleanup.sh
+
+🚀 Mobile Development Cleanup Script
+📊 Disk space before cleanup:
+Filesystem   Size  Used  Avail Capacity iused      ifree %iused  Mounted on
+/dev/disk1s5 466G  350G   95G    79% 1234567  987654321    2%   /
+
+Do you want to clear Xcode DerivedData? (y/n): y
+✅ Cleared Xcode DerivedData
+...
+📊 Disk space after cleanup:
+Filesystem   Size  Used  Avail Capacity iused      ifree %iused  Mounted on
+/dev/disk1s5 466G  320G  125G    72% 1234560  987654328    2%   /
+
+🎉 Cleanup complete!
+```
+
+---
+
+## 🔮 Future Improvements
+
+- Add **non-interactive mode** (`./cleanup.sh --all`) to clear everything automatically.
+- Add **basic vs extended** cleanup modes.
+- Add **logs of deleted sizes** per category.
+
+---
