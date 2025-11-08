@@ -91,7 +91,27 @@ def generate_daily_report(issues):
     # Build the markdown content
     markdown = f"# {current_date} - Daily Progress Report\n\n"
     markdown += "## 📦 Module\n\n"
-    markdown += "**From Jira Board**\n\n"
+    
+    # Extract unique labels from all issues
+    labels = set()
+    for issue in issues:
+        if not isinstance(issue, dict):
+            continue
+        fields = issue.get("fields", {})
+        issue_labels = fields.get("labels", [])
+        if issue_labels:
+            # Labels are strings directly, not objects
+            for label in issue_labels:
+                if label:
+                    labels.add(label)
+    
+    # Display labels or fallback to "From Jira Board"
+    if labels:
+        label_list = ", ".join(sorted(labels))
+        markdown += f"**{label_list}**\n\n"
+    else:
+        markdown += "**From Jira Board**\n\n"
+    
     markdown += "## 🧩 What I Did Today\n\n"
     markdown += "* Picked and worked on the following Jira issues:\n\n"
     
